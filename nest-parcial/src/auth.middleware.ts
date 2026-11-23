@@ -5,8 +5,9 @@ import { Request, Response, NextFunction } from 'express';
 export class AuthMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers['authorization'];
+    const adminToken = process.env.ADMIN_TOKEN;
 
-    if (authHeader !== 'admin-secret-token') {
+    if (!adminToken || authHeader !== adminToken) {
       return res.status(403).json({ error: 'Prohibido' });
     }
 
